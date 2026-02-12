@@ -13,6 +13,7 @@ body {
 :root {
     /* Background Colors */
     --bg-primary-color: #0c0c0c;
+    --bg-fill-color: #fdfdfc;
 
     /* Text-Colors */
     --text-primary-color: #f0f0f0;
@@ -55,7 +56,7 @@ section {
     display: flex;
     flex-direction: column;
     height: 100%;
-    background-color: rgba(9, 9, 75);
+    gap: var(--space-lg);
 }
 
 section .infos {
@@ -73,4 +74,18 @@ section .infos {
 .board {
     border: 1px solid var(--border-primary-color);
     flex-grow: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+    grid-template-rows: repeat(auto-fill, minmax(50px, 1fr));
+}
+
+.block {
+    /* width: 30px;
+    height: 30px; */
+
+    border: 1px solid var(--border-primary-color);
+}
+
+.fill {
+    background-color: var(--bg-fill-color);
 }
