@@ -25,9 +25,10 @@ const btnRight = document.getElementById('btn-right');
 const btnPause = document.getElementById('btn-pause');
 
 // --- Constants ---
-const BASE_SPEED = 300; // ms per tick (slowest)
-const MIN_SPEED = 100;  // ms per tick (fastest)
-const SPEED_STEP = 5;   // ms reduction per food eaten
+const BASE_SPEED = 300;      // ms per tick (slowest)
+const MIN_SPEED = 100;       // ms per tick (fastest)
+const SPEED_STEP = 20;       // ms reduction per speed level
+const FOODS_PER_LEVEL = 3;   // foods needed to increase one speed level
 
 // --- State ---
 let highScore = parseInt(localStorage.getItem('highScore')) || 0;
@@ -101,12 +102,13 @@ function spawnFood() {
 // --- Helper: Update speed based on score ---
 function updateSpeed() {
     const foodEaten = score / 10;
+    const newLevel = Math.floor(foodEaten / FOODS_PER_LEVEL) + 1;
     const maxLevels = Math.floor((BASE_SPEED - MIN_SPEED) / SPEED_STEP);
-    currentSpeed = Math.max(MIN_SPEED, BASE_SPEED - foodEaten * SPEED_STEP);
-    speedLevel = Math.min(foodEaten, maxLevels) + 1;
+    speedLevel = Math.min(newLevel, maxLevels + 1);
+    currentSpeed = Math.max(MIN_SPEED, BASE_SPEED - (speedLevel - 1) * SPEED_STEP);
     speedElement.innerText = speedLevel;
 
-    // Restart the interval with the new speed
+    // Restart the interval with the new speed only if the level changed
     if (intervalId !== null) {
         clearInterval(intervalId);
         intervalId = setInterval(render, currentSpeed);
