@@ -85,7 +85,22 @@ function render() {
     // Food Consume Logic
     if (head.x == food.x && head.y == food.y) {
         blocks[`${food.y}--${food.x}`].classList.remove("food")
-        food = { x: Math.floor(Math.random() * cols), y: Math.floor(Math.random() * rows) }
+        let valid = false
+        while (!valid) {
+            food = {
+                x: Math.floor(Math.random() * cols),
+                y: Math.floor(Math.random() * rows)
+            }
+
+            valid = true
+            for (let segment of snake) {
+                if (segment.x === food.x && segment.y === food.y) {
+                    valid = false
+                    break
+                }
+            }
+        }
+
         blocks[`${food.y}--${food.x}`].classList.add("food")
 
         snake.unshift(head)
