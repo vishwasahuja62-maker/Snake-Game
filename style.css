@@ -1,3 +1,7 @@
+/* ========================================
+   🐍 Snake Game - Styles
+   ======================================== */
+
 * {
     margin: 0;
     padding: 0;
@@ -8,43 +12,60 @@ html,
 body {
     height: 100%;
     width: 100%;
+    overflow: hidden;
+    touch-action: manipulation;
 }
 
 :root {
-    /* Background Colors */
-    --bg-primary-color: #0c0c0c;
-    --bg-fill-color: #fdfdfc;
-    --bg-food-color: #ff3b3b;
+    /* Core Palette */
+    --bg-primary: #0a0a0f;
+    --bg-card: rgba(20, 20, 35, 0.85);
+    --bg-board: #0d0d18;
 
-    /* Text-Colors */
-    --text-primary-color: #f0f0f0;
+    /* Snake & Food */
+    --snake-color: #00e676;
+    --snake-head-color: #69f0ae;
+    --snake-glow: rgba(0, 230, 118, 0.5);
+    --food-color: #ff1744;
+    --food-glow: rgba(255, 23, 68, 0.6);
 
-    /* Spacing Variables */
+    /* Accent */
+    --accent: #7c4dff;
+    --accent-glow: rgba(124, 77, 255, 0.4);
+    --accent-hover: #b388ff;
+
+    /* Text */
+    --text-primary: #eaeaef;
+    --text-secondary: #8888a0;
+
+    /* UI */
+    --border-color: rgba(124, 77, 255, 0.25);
+    --border-subtle: rgba(255, 255, 255, 0.06);
+
+    /* Spacing */
     --space-xs: 4px;
     --space-sm: 8px;
     --space-md: 16px;
     --space-lg: 24px;
     --space-xl: 32px;
     --space-2xl: 40px;
-    --space-3xl: 48px;
-
-    /* Border Colors */
-    --border-primary-color: #333333;
 
     /* Border Radius */
-    --border-radius-xs: 4px;
-    --border-radius-sm: 8px;
-    --border-radius-md: 12px;
-    --border-radius-lg: 16px;
-    --border-radius-xl: 20px;
-    --border-radius-2xl: 24px;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
 }
 
 html {
-    background-color: var(--bg-primary-color);
-    color: var(--text-primary-color);
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
+
+/* ========================================
+   Layout
+   ======================================== */
 
 main,
 section {
@@ -52,82 +73,420 @@ section {
     height: 100%;
 }
 
-.btn {
-    padding: var(--space-sm) var(--space-md);
-    border: none;
-    border-radius: var(--border-radius-sm);
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.btn:hover {
-    transform: scale(1.1);
-}
-
 section {
-    padding: var(--space-2xl);
+    padding: var(--space-lg);
     display: flex;
     flex-direction: column;
-    height: 100%;
-    gap: var(--space-lg);
+    gap: var(--space-md);
 }
 
-section .infos {
+/* ========================================
+   Info Bar
+   ======================================== */
+
+.infos {
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
 }
 
 .info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
     padding: var(--space-sm) var(--space-md);
-    border: 1px solid var(--border-primary-color);
-    border-radius: var(--border-radius-sm);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    backdrop-filter: blur(10px);
+    min-width: 90px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.info:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 12px var(--accent-glow);
+}
+
+.info-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+}
+
+.info-value {
+    font-size: 1.15rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--snake-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ========================================
+   Board
+   ======================================== */
+
+.board-wrapper {
+    position: relative;
+    flex-grow: 1;
+    min-height: 0;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    background: var(--bg-board);
+    box-shadow: inset 0 0 40px rgba(124, 77, 255, 0.05);
 }
 
 .board {
-    border: 1px solid var(--border-primary-color);
-    flex-grow: 1;
+    width: 100%;
+    height: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
     grid-template-rows: repeat(auto-fill, minmax(50px, 1fr));
 }
 
 .block {
-    /* width: 30px;
-    height: 30px; */
-
-    border: 1px solid var(--border-primary-color);
-    border-radius: 50%;
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    transition: background-color 0.1s ease, box-shadow 0.15s ease;
 }
 
 .fill {
-    background-color: var(--bg-fill-color);
+    background-color: var(--snake-color);
+    box-shadow: 0 0 8px var(--snake-glow);
+    border-radius: 6px;
+}
+
+.fill.head {
+    background-color: var(--snake-head-color);
+    box-shadow: 0 0 14px var(--snake-glow), 0 0 30px rgba(0, 230, 118, 0.2);
+    border-radius: 8px;
 }
 
 .food {
-    background-color: var(--bg-food-color);
+    background-color: var(--food-color);
+    box-shadow: 0 0 10px var(--food-glow), 0 0 25px rgba(255, 23, 68, 0.25);
+    border-radius: 50%;
+    animation: food-pulse 1.5s ease-in-out infinite;
 }
 
+@keyframes food-pulse {
+
+    0%,
+    100% {
+        transform: scale(0.85);
+        opacity: 0.9;
+    }
+
+    50% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* ========================================
+   Pause Overlay
+   ======================================== */
+
+.pause-overlay {
+    position: absolute;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-sm);
+    background: rgba(10, 10, 15, 0.75);
+    backdrop-filter: blur(6px);
+    z-index: 5;
+}
+
+.pause-overlay.visible {
+    display: flex;
+}
+
+.pause-overlay span {
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    background: linear-gradient(135deg, var(--accent), var(--snake-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: pause-breathe 2s ease-in-out infinite;
+}
+
+.pause-overlay small {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+@keyframes pause-breathe {
+
+    0%,
+    100% {
+        opacity: 0.6;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+/* ========================================
+   Buttons
+   ======================================== */
+
+.btn {
+    padding: var(--space-md) var(--space-xl);
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #fff;
+    background: linear-gradient(135deg, var(--accent), #651fff);
+    box-shadow: 0 4px 20px var(--accent-glow);
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 6px 30px var(--accent-glow);
+    background: linear-gradient(135deg, var(--accent-hover), var(--accent));
+}
+
+.btn:active {
+    transform: scale(0.97);
+}
+
+/* ========================================
+   Modal
+   ======================================== */
+
 .modal {
-    height: 100vh;
-    width: 100vw;
     position: fixed;
-    top: 0;
-    background-color: #35353587;
-    backdrop-filter: blur(4px);
+    inset: 0;
     display: flex;
     justify-content: center;
     align-items: center;
+    background: rgba(10, 10, 15, 0.8);
+    backdrop-filter: blur(8px);
+    z-index: 100;
 }
 
-.modal .start-game,
-.modal .game-over {
+.modal-card {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: var(--space-lg);
+    padding: var(--space-2xl) var(--space-xl);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 10px 60px rgba(124, 77, 255, 0.15);
+    text-align: center;
+    animation: modal-pop 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes modal-pop {
+    0% {
+        opacity: 0;
+        transform: scale(0.85) translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.modal-icon {
+    font-size: 4rem;
+    line-height: 1;
+    animation: icon-bounce 2s ease-in-out infinite;
+}
+
+@keyframes icon-bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+.modal-card h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #fff, var(--accent-hover));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.modal-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.modal-subtitle kbd {
+    display: inline-block;
+    padding: 2px 8px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-family: 'Outfit', monospace;
+    font-size: 0.8rem;
 }
 
 .modal .game-over {
     display: none;
+}
+
+/* ========================================
+   Mobile D-Pad Controls
+   ======================================== */
+
+.mobile-controls {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding-top: var(--space-sm);
+    padding-bottom: var(--space-sm);
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.dpad {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.dpad-middle-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.dpad-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 56px;
+    height: 56px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: 1.3rem;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: all 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.dpad-btn:active {
+    background: var(--accent);
+    box-shadow: 0 0 16px var(--accent-glow);
+    transform: scale(0.92);
+}
+
+.dpad-pause {
+    font-size: 1.1rem;
+    background: rgba(124, 77, 255, 0.15);
+    border-color: var(--accent);
+}
+
+/* ========================================
+   Responsive
+   ======================================== */
+
+@media (max-width: 768px) {
+    section {
+        padding: var(--space-md) var(--space-sm);
+        gap: var(--space-sm);
+    }
+
+    .infos {
+        gap: var(--space-xs);
+    }
+
+    .info {
+        min-width: 70px;
+        padding: var(--space-xs) var(--space-sm);
+    }
+
+    .info-label {
+        font-size: 0.6rem;
+    }
+
+    .info-value {
+        font-size: 0.95rem;
+    }
+
+    .mobile-controls {
+        display: flex;
+    }
+
+    .board {
+        grid-template-columns: repeat(auto-fill, minmax(30px, 1fr));
+        grid-template-rows: repeat(auto-fill, minmax(30px, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .info {
+        min-width: 60px;
+        padding: 4px 6px;
+    }
+
+    .info-label {
+        font-size: 0.55rem;
+    }
+
+    .info-value {
+        font-size: 0.8rem;
+    }
+
+    .dpad-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 1.15rem;
+    }
+
+    .modal-card {
+        margin: var(--space-md);
+        padding: var(--space-lg) var(--space-md);
+    }
+
+    .modal-card h2 {
+        font-size: 1.4rem;
+    }
+
+    .pause-overlay span {
+        font-size: 1.8rem;
+    }
+}
+
+/* Touch device detection */
+@media (hover: none) and (pointer: coarse) {
+    .mobile-controls {
+        display: flex;
+    }
 }

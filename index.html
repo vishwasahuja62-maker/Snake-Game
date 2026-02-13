@@ -3,8 +3,13 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snake Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description"
+        content="A classic Snake Game built with vanilla HTML, CSS, and JavaScript. Features mobile controls, speed scaling, pause, and reverse direction protection.">
+    <title>🐍 Snake Game</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -12,33 +17,60 @@
     <main>
         <section>
             <div class="infos">
-                <div class="info">
-                    <h3>High Score:
-                        <span id="high-score">0</span>
-                    </h3>
+                <div class="info" id="info-highscore">
+                    <span class="info-label">🏆 High Score</span>
+                    <span class="info-value" id="high-score">0</span>
                 </div>
-                <div class="info">
-                    <h3>Score:
-                        <span id="score">0</span>
-                    </h3>
+                <div class="info" id="info-score">
+                    <span class="info-label">⭐ Score</span>
+                    <span class="info-value" id="score">0</span>
                 </div>
-                <div class="info">
-                    <h3>Time:
-                        <span id="time">00-00</span>
-                    </h3>
+                <div class="info" id="info-speed">
+                    <span class="info-label">⚡ Speed</span>
+                    <span class="info-value" id="speed">1</span>
+                </div>
+                <div class="info" id="info-time">
+                    <span class="info-label">⏱️ Time</span>
+                    <span class="info-value" id="time">00:00</span>
                 </div>
             </div>
-            <div class="board">
+
+            <div class="board-wrapper">
+                <div class="board" id="game-board"></div>
+                <div class="pause-overlay" id="pause-overlay">
+                    <span>⏸️ PAUSED</span>
+                    <small>Press Space or tap Pause to resume</small>
+                </div>
+            </div>
+
+            <!-- Mobile Controls -->
+            <div class="mobile-controls" id="mobile-controls">
+                <div class="dpad">
+                    <button class="dpad-btn dpad-up" id="btn-up" aria-label="Move Up">▲</button>
+                    <div class="dpad-middle-row">
+                        <button class="dpad-btn dpad-left" id="btn-left" aria-label="Move Left">◀</button>
+                        <button class="dpad-btn dpad-pause" id="btn-pause" aria-label="Pause">⏸</button>
+                        <button class="dpad-btn dpad-right" id="btn-right" aria-label="Move Right">▶</button>
+                    </div>
+                    <button class="dpad-btn dpad-down" id="btn-down" aria-label="Move Down">▼</button>
+                </div>
             </div>
         </section>
-        <div class="modal">
-            <div class="start-game">
-                <h3>Welcome To the Snake Game</h3>
-                <button class="btn btn-start">Start Button</button>
+
+        <!-- Start Modal -->
+        <div class="modal" id="modal">
+            <div class="modal-card start-game" id="start-game-modal">
+                <div class="modal-icon">🐍</div>
+                <h2>Snake Game</h2>
+                <p class="modal-subtitle">Use arrow keys or D-pad to control the snake.<br>Press <kbd>Space</kbd> to
+                    pause.</p>
+                <button class="btn btn-start" id="btn-start">▶ Start Game</button>
             </div>
-            <div class="game-over">
-                <h3>Game Over</h3>
-                <button class="btn btn-restart">Restart Button</button>
+            <div class="modal-card game-over" id="game-over-modal">
+                <div class="modal-icon">💀</div>
+                <h2>Game Over</h2>
+                <p class="modal-subtitle">Your score: <strong id="final-score">0</strong></p>
+                <button class="btn btn-restart" id="btn-restart">🔄 Play Again</button>
             </div>
         </div>
     </main>
