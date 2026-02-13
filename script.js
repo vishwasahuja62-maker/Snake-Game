@@ -12,9 +12,11 @@ const timeElement = document.querySelector('#time');
 const blockHeight = 50
 const blockWidth = 50
 
-let highScore = 0;
+let highScore = localStorage.getItem("highScore") || 0;
 let score = 0;
 let time = '00-00';
+
+highScoreElement.innerText = highScore
 
 const cols = Math.floor(board.clientWidth / blockWidth);
 const rows = Math.floor(board.clientHeight / blockHeight);
@@ -74,6 +76,11 @@ function render() {
         snake.unshift(head)
         score += 10
         scoreElement.innerText = score
+
+        if (score > highScore) {
+            highScore = score
+            localStorage.setItem("highScore", highScore.toString())
+        }
     }
 
 
@@ -111,6 +118,9 @@ function restartGame() {
     snake.forEach(segment => {
         blocks[`${segment.y}--${segment.x}`].classList.remove("fill")
     })
+    score = 0
+    time = '00-00'
+
     modal.style.display = "none"
     direction = "down"
     snake = [{ x: 1, y: 3 }]
