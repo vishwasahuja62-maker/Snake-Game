@@ -20,7 +20,10 @@ highScoreElement.innerText = highScore
 
 const cols = Math.floor(board.clientWidth / blockWidth);
 const rows = Math.floor(board.clientHeight / blockHeight);
+
 let intervalId = null;
+let timerIntervalId = null;
+
 let food = { x: Math.floor(Math.random() * cols), y: Math.floor(Math.random() * rows) }
 const blocks = []
 let snake = [{
@@ -34,7 +37,6 @@ for (let row = 0; row < rows; row++) {
         const block = document.createElement('div');
         block.classList.add("block")
         board.appendChild(block);
-        block.innerText = `${row}--${col}`
         blocks[`${row}--${col}`] = block
     }
 }
@@ -101,14 +103,23 @@ function render() {
 
 }
 
-// intervalId = setInterval(() => {
-//     render()
-// }, 400);
-
-
 startButton.addEventListener("click", () => {
     modal.style.display = "none"
     intervalId = setInterval(() => { render() }, 300)
+
+    timerIntervalId = setInterval(() => {
+        let [min, sec] = time.split("-").map(Number)  // Destructuring
+
+        if (sec == 59) {
+            min += 1
+            sec = 0
+        } else {
+            sec += 1
+        }
+        time = `${min}-${sec}`
+        timeElement.innerText = time
+
+    }, 1000)
 })
 
 restartButton.addEventListener("click", restartGame)
@@ -120,6 +131,10 @@ function restartGame() {
     })
     score = 0
     time = '00-00'
+
+    scoreElement.innerText = score
+    timeElement.innerText = time
+    highScoreElement.innerText = highScore
 
     modal.style.display = "none"
     direction = "down"
