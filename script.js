@@ -4,8 +4,17 @@ const modal = document.querySelector('.modal');
 const startGameModal = document.querySelector('.start-game');
 const gameOverModal = document.querySelector('.game-over');
 const restartButton = document.querySelector('.btn-restart')
+
+const highScoreElement = document.querySelector('#high-score');
+const scoreElement = document.querySelector('#score');
+const timeElement = document.querySelector('#time');
+
 const blockHeight = 50
 const blockWidth = 50
+
+let highScore = 0;
+let score = 0;
+let time = '00-00';
 
 const cols = Math.floor(board.clientWidth / blockWidth);
 const rows = Math.floor(board.clientHeight / blockHeight);
@@ -47,6 +56,7 @@ function render() {
         head = { x: snake[0].x, y: snake[0].y - 1 }
     }
 
+    // Wall Collision Logic
     if (head.x < 0 || head.x >= cols || head.y < 0 || head.y >= rows) {
         clearInterval(intervalId)
         modal.style.display = "flex"
@@ -55,12 +65,15 @@ function render() {
         return;
     }
 
+    // Food Consume Logic
     if (head.x == food.x && head.y == food.y) {
         blocks[`${food.y}--${food.x}`].classList.remove("food")
         food = { x: Math.floor(Math.random() * cols), y: Math.floor(Math.random() * rows) }
         blocks[`${food.y}--${food.x}`].classList.add("food")
 
         snake.unshift(head)
+        score += 10
+        scoreElement.innerText = score
     }
 
 
