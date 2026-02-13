@@ -25,9 +25,9 @@ const btnRight = document.getElementById('btn-right');
 const btnPause = document.getElementById('btn-pause');
 
 // --- Constants ---
-const BASE_SPEED = 200; // ms per tick (slowest)
-const MIN_SPEED = 80;   // ms per tick (fastest)
-const SPEED_STEP = 15;  // ms reduction per food eaten
+const BASE_SPEED = 300; // ms per tick (slowest)
+const MIN_SPEED = 100;  // ms per tick (fastest)
+const SPEED_STEP = 5;   // ms reduction per food eaten
 
 // --- State ---
 let highScore = parseInt(localStorage.getItem('highScore')) || 0;
