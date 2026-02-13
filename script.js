@@ -60,6 +60,19 @@ function render() {
         head = { x: snake[0].x, y: snake[0].y - 1 }
     }
 
+    // Self Collision Logic
+    for (let segment of snake) {
+        if (segment.x === head.x && segment.y === head.y) {
+            clearInterval(intervalId)
+            clearInterval(timerIntervalId)
+
+            modal.style.display = "flex"
+            startGameModal.style.display = "none"
+            gameOverModal.style.display = "flex"
+            return;
+        }
+    }
+
     // Wall Collision Logic
     if (head.x < 0 || head.x >= cols || head.y < 0 || head.y >= rows) {
         clearInterval(intervalId)
