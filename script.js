@@ -101,8 +101,9 @@ function spawnFood() {
 // --- Helper: Update speed based on score ---
 function updateSpeed() {
     const foodEaten = score / 10;
+    const maxLevels = Math.floor((BASE_SPEED - MIN_SPEED) / SPEED_STEP);
     currentSpeed = Math.max(MIN_SPEED, BASE_SPEED - foodEaten * SPEED_STEP);
-    speedLevel = Math.floor((BASE_SPEED - currentSpeed) / SPEED_STEP) + 1;
+    speedLevel = Math.min(foodEaten, maxLevels) + 1;
     speedElement.innerText = speedLevel;
 
     // Restart the interval with the new speed
@@ -143,11 +144,13 @@ function render() {
         return;
     }
 
+    // Track whether the snake ate food this tick
+    let ate = false;
+
     // Food Consumption
     if (head.x === food.x && head.y === food.y) {
         blocks[`${food.y}--${food.x}`].classList.remove('food');
 
-        snake.unshift(head);
         score += 10;
         scoreElement.innerText = score;
 
@@ -159,11 +162,11 @@ function render() {
 
         food = spawnFood();
         updateSpeed();
-        return; // Don't pop tail — snake grows
+        ate = true;
     }
 
     // Clear old snake rendering
-    snake.forEach((segment, i) => {
+    snake.forEach((segment) => {
         const key = `${segment.y}--${segment.x}`;
         if (blocks[key]) {
             blocks[key].classList.remove('fill', 'head');
@@ -172,7 +175,9 @@ function render() {
 
     // Move snake
     snake.unshift(head);
-    snake.pop();
+    if (!ate) {
+        snake.pop(); // Only remove tail if snake didn't grow
+    }
 
     // Render snake
     snake.forEach((segment, i) => {
